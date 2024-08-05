@@ -2,6 +2,7 @@
 File with detector constants and addition function
 Light convertion and energy convertion will be differented
 Because there are a resolution of detector and multi scattering of neutron
+Also I want to change principle, better convert in electron equivalet
 '''
 
 #libraries

@@ -14,22 +14,6 @@ from PyFunctions.Constants import LEN
 MIN_ = 0.
 ##########
 
-#function to change channel scale to Energy scale in Histogram
-def GetElectronEquivalent(MainHist, Calibration):
-    Hist = [[], []]
-    N = len(MainHist[0])
-    for i in range(0, N):
-
-        Energy = Calibration[0] * MainHist[0][i] + Calibration[1]
-        Amount = MainHist[1][i]
-        
-        if(Energy > 0):
-            Hist[0].append(Energy)
-            Hist[1].append(Amount)
-    
-    return np.array(Hist)
-##############################################################
-
 #Central derivative
 def GetDerivative(Hist):
     N = len(Hist[0])
@@ -90,7 +74,7 @@ def GetCorrection(Hist):#uses cross_section
     Hist1 =[[], []]
     N = len(Hist[0])
     for i in range(0, N):
-        Hist1[0].append(Efficient(Hist[0][i] / 1000))
+        Hist1[0].append(Efficient(Hist[0][i]))
         Hist1[1].append(Hist[1][i])
 
     return np.array(Hist1)
