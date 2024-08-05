@@ -1,14 +1,24 @@
+'''
+File with functions for analysis
+Here there are a Convertion to Energy function,
+also a smoothing function,
+and the some functions for make a approximation
+'''
+
+#libraries
 import numpy as np
 import math
 from scipy.optimize import minimize
 from scipy.integrate import quad as Integrall
+##########
 
 #constants
-from AD_pip.Constants import BIN_E, MAX_E, MIN_E, ENERGY_ID, AMOUNT_ID, LEN, EfHist , KOEF
-from AD_pip.Constants import BIN_L, MAX_L, MIN_L
-#functions
-from AD_pip.Constants import GetResolution, LightConv, EnergyConv
+from PyFunctions.Constants import BIN_E, MAX_E, ENERGY_ID, AMOUNT_ID
+from PyFunctions.Constants import BIN_L
+from PyFunctions.Constants import EnergyConv
+##########
 
+#function to Energy Convertion
 def Convert_To_Energy(LightHist):
     EnergyHist = [[],[]]
     N = int(MAX_E / BIN_E)
@@ -27,30 +37,34 @@ def Convert_To_Energy(LightHist):
         RightEnergy = BIN_E * (EIndx + 0.5)
 
         #next Light Bin
-        if(RightLight <= LightConv(LeftEnergy)):
+        if(EnergyConv(RightLight) <= LeftEnergy):
+        #if(RightLight <= LightConv(LeftEnergy)):
             LIndx += 1
 
         #next Energy Bin
-        elif(LeftLight > LightConv(RightEnergy)):
+        elif(LeftEnergy > EnergyConv(RightLight)):
             EIndx += 1
 
         #current Bin
         else:
             RightLightMore = 0
             
-            LeftBord = LeftLight
-            if(LeftLight < LightConv(LeftEnergy)):
-                LeftBord = LightConv(LeftEnergy)      
+            LeftBord = EnergyConv(LeftLight)#default bord - Light bord
+            if(EnergyConv(LeftLight) < LeftEnergy):#Energy left bord more than Light
+                LeftBord = LeftEnergy         
 
-            RightBord = RightLight
-            if(RightLight > LightConv(RightEnergy)):
-                RightBord = LightConv(RightEnergy) 
-                RightLightMore = 1   
+            RightBord = EnergyConv(RightLight)#default bord - Light bord
+            if(EnergyConv(RightLight) > RightEnergy):#Energy left board less than Light
+                RightBord = RightEnergy 
+                RightLightMore = 1 #we need to go to next bin    
             
-            k = (RightBord - LeftBord) / (RightLight - LeftLight)
+            FullBin = (EnergyConv(RightLight) - EnergyConv(LeftLight))
+            PartOfEnergy = (RightBord - LeftBord)
+            k = 0
+            if(FullBin != 0):
+                k = PartOfEnergy/FullBin 
             
             EnergyHist[1][EIndx] += k * LightHist[1][LIndx]
-            
 
             if(RightLightMore):
                 EIndx += 1
@@ -58,16 +72,18 @@ def Convert_To_Energy(LightHist):
                 LIndx += 1
           
     return np.array(EnergyHist)
+##############################
 
-
-#Simple smoothing, that calculate avarege value at the 'numb' bins
-def GetLinearSmoothing(Hist, numb = 2):
+#Simple smoothing 
+def GetLinearSmoothing(Hist, numb = 2):#this calculate avarege value at the 'numb' bins
     filter = np.ones(numb) / numb #vector of smoothing
     half_numb = numb // 2 
     resalt = np.convolve(Hist[AMOUNT_ID], filter, mode='same') #python method
     Hist1 = [(Hist[ENERGY_ID][half_numb:-half_numb]),(resalt[half_numb:-half_numb])]
     return np.array(Hist1)  
+#################
 
+#function for aproximation
 #Gauss function
 def Gauss(Ex, Sigma):
     if(Sigma == 0):
@@ -142,7 +158,6 @@ def ErrorSquare(Hist):
             df += ((AprHist[AMOUNT_ID][m] - Hist[AMOUNT_ID][m]) ** 2)
         return df
     return f
-
 
 #Find peaks from Histogram
 def findPeaks(Hist, GetDerivative):
@@ -264,3 +279,4 @@ def GetMainPeak(Hist, Boundaries, GetDerivative):
         print('NO PEAKS')
         return [[0],[0]]
     return np.array(MainPeak)
+#########################

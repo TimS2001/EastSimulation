@@ -1,6 +1,6 @@
 About project
 
-I devide this project to 2 parts, the thirst about geant4 calculation
+I devide this project to 2 parts, the first about geant4 calculation
 The second about python analising
 
 Geant4 part:
@@ -22,6 +22,8 @@ Geant4 part:
     you can create a simple peak
 
 Python part:
-    main file to make and plot analisis is a Plot.py
+    main file to make and plot analisis is a plot
 
-    AD_pip directory for adition files
+    PyFunctions directory for adition files
+    in PyFunctions\Constants you can change the detector
+    also you can add your detector in PyFunctions\PyDetectors and after use it

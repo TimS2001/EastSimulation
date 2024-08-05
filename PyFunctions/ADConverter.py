@@ -1,11 +1,20 @@
+'''
+In this file we will restore the neutron spectrum
+'''
+
+#libraries
 from scipy.io import loadmat
 import math
 import numpy as np
-#time in sec
+##########
 
-from AD_pip.Constants import LEN 
+#constants
+from PyFunctions.Constants import LEN 
+#Min value, that will be used to calculate derivative
+MIN_ = 0.
+##########
 
-#change channel scale to Energy scale in Histogram
+#function to change channel scale to Energy scale in Histogram
 def GetElectronEquivalent(MainHist, Calibration):
     Hist = [[], []]
     N = len(MainHist[0])
@@ -19,9 +28,8 @@ def GetElectronEquivalent(MainHist, Calibration):
             Hist[1].append(Amount)
     
     return np.array(Hist)
+##############################################################
 
-#Min value to calculate derivative
-MIN_ = 0.
 #Central derivative
 def GetDerivative(Hist):
     N = len(Hist[0])
@@ -48,9 +56,10 @@ def GetDerivative(Hist):
     DHist[1] *= K1 / K2
 
     return np.array(DHist)
+###################
 
-#Correction by cross_section
-def GetCorrection(Hist):
+#Correction for detector efficiency
+def GetCorrection(Hist):#uses cross_section
     Cross_section_Carbon = np.genfromtxt('sys_data/Carbon_cross_section.txt', dtype=[('Energy', '<f8'), ('Value', '<f8')])
     
     def Efficient(Energy):#Energy should be in a MeV
@@ -85,5 +94,5 @@ def GetCorrection(Hist):
         Hist1[1].append(Hist[1][i])
 
     return np.array(Hist1)
-
+###################################
     

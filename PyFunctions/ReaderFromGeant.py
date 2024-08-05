@@ -1,13 +1,23 @@
+'''
+In this file, there is a function, that simulates the work of detector
+Detector should covert energy in light
+also Detector has a resolution, we will blur our Data 
+'''
+
+#libraries
 import math
 import numpy as np
 from scipy.integrate import quad
+##########
 
 #constants
-from AD_pip.Constants import LIGHT_ID, AMOUNT_ID
-from AD_pip.Constants import BIN_L, MAX_L, MIN_L
-#functions
-from AD_pip.Constants import LightConv, GetResolution
+from PyFunctions.Constants import LIGHT_ID, AMOUNT_ID
+from PyFunctions.Constants import BIN_L, MAX_L, MIN_L
+from PyFunctions.Constants import LightConv, GetResolution
+##########
 
+
+#Influance of resolution
 
 #Gauss Func normalized by sigma
 def Gauss(Ex, sigma):
@@ -17,7 +27,7 @@ def Gauss(Ex, sigma):
         return k * math.exp(s * (x - Ex)*(x - Ex))
     return f
 
-#Func to Blur detector data by influance of resolution
+#Func to Blur detector data by Gauss
 def BlurByResolution(Hist):
 
     N = len(Hist[LIGHT_ID])
@@ -85,6 +95,7 @@ def BlurByResolution(Hist):
                 HistBlur[AMOUNT_ID][i] += amount_now
 
     return HistBlur
+########################
 
 #Func to Convert Array[read Geant data from .txt file] to Histogram
 def ConvertToHist(Particles):
@@ -122,8 +133,9 @@ def ConvertToHist(Particles):
 
     #Hist = (np.array([Light, Amount]))
     return np.array([Light, Amount])
+###################################################################
 
-#Complex Function of Reader
+#Main function of Reader
 def ReadAndBlur(str):
     #arrays for different partycles
     #Name - amount of borned protons at one neutron
@@ -193,4 +205,4 @@ def ReadAndBlur(str):
     Hist = ConvertToHist(Particles)
     Hist = BlurByResolution(Hist)
     return Hist
-
+########################
