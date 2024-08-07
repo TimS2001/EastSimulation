@@ -237,9 +237,7 @@ def FindOptimalSolution(Hist, Error_function):
     optimal_Ex = solution.x[0]
     optimal_Sigma = solution.x[1]
     optimal_High = solution.x[2]
-    print(optimal_Ex, optimal_Sigma, optimal_High)    
-#    return Ex, Sigma, High
-
+    
     return optimal_Ex, optimal_Sigma, optimal_High
 
 #find the main Peak
