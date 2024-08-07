@@ -17,8 +17,8 @@ AMOUNT_ID = 1
 #######################################
 
 #you can change detector files here
-from PyFunctions.PyDetectors.BC501A_EAST import BIN_L, MAX_L, MIN_L, LEN
-from PyFunctions.PyDetectors.BC501A_EAST import LightConv, EnergyConv, GetResolution
+from PyFunctions.PyDetectors.EJ301_EAST import BIN_L, MAX_L, MIN_L, LEN
+from PyFunctions.PyDetectors.EJ301_EAST import LightConv, EnergyConv, GetResolution
 ###################################
 
 #cross section for carbon
