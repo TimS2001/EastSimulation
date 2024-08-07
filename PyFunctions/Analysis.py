@@ -90,7 +90,7 @@ def Gauss(Ex, Sigma):
         def f(x):
             return 0
         return f
-    k = 1. / (Sigma * math.sqrt(2*math.pi))
+    k = 1. #/ (Sigma * math.sqrt(2*math.pi))
     s = -0.5 / (Sigma * Sigma)
     def f(x):
         return k * math.exp(s * (x - Ex)*(x - Ex))
@@ -129,19 +129,22 @@ def GetAprHist(Hist, vector):
 #f - squarre difference between Aproximation in (e, s ,h) point and origin Histogram
 def ErrorSquare(Hist):
     N = len(Hist[ENERGY_ID])
+    if(N <= 2):
+        return 0
     bin_ = Hist[ENERGY_ID][1] - Hist[ENERGY_ID][0]
     
     def f(vector): # vector - (e, s, h)
         df = 0.
         AprHist = [[], []]
 
-        if(vector[0] <= 0)or(vector[1] <= 0)or(vector[2] <= 0):
-            return 1.e10 #(0, 0, 0) - bad solution, error also will be 0
+        #if(vector[0] <= 0)or(vector[1] <= 0)or(vector[2] <= 0):
+        #    return np.sum(Hist[1]) # - bad solution, error also will be 0
+
 
         for m in range(0, N):
             x_left_boundary = Hist[ENERGY_ID][0] + (m - 0.5) * bin_
             x_right_boundary = Hist[ENERGY_ID][0] + (m + 0.5) * bin_
-            Energy = m * bin_
+            Energy = Hist[ENERGY_ID][m]
             Amount = (Integrall(Gauss(vector[0], vector[1]), x_left_boundary, x_right_boundary))[0]
 
             AprHist[ENERGY_ID].append(Energy)
@@ -234,6 +237,8 @@ def FindOptimalSolution(Hist, Error_function):
     optimal_Ex = solution.x[0]
     optimal_Sigma = solution.x[1]
     optimal_High = solution.x[2]
+    print(optimal_Ex, optimal_Sigma, optimal_High)    
+#    return Ex, Sigma, High
 
     return optimal_Ex, optimal_Sigma, optimal_High
 

@@ -14,7 +14,7 @@
 
 
 ////////////////////////
-#include "QGSP_BIC_HP.hh" //“QGSP_BIC_HP.hh
+#include "Physics.hh" //“QGSP_BIC_HP.hh
 ////////////////////////
   
 
@@ -22,7 +22,7 @@
 int Vis = 0;
 
 //constants for current simulation
-G4double flux = 5.e7 / s;
+G4double flux = 5.e8 / s;
 G4double tau = 0.1 * s;
 G4int N = (G4int)(flux * tau); // particle amount
 
@@ -44,7 +44,7 @@ int main(int argc,char** argv){
     
     //phys
     /////////////////////////////////////
-    G4VModularPhysicsList* physicsList = new QGSP_BIC_HP;
+    G4VModularPhysicsList* physicsList = new MyPhysics();
     runManager->SetUserInitialization(physicsList);
     /////////////////////////////////////
 
